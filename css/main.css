@@ -1,0 +1,181 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body,
+html {
+  width: 100vw;
+  height: 100vh;
+  color: #ccc;
+  margin: 0;
+  overflow: hidden;
+  background-color: #262626;
+}
+
+body,
+main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  max-height: 100%;
+}
+
+canvas {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: 2px solid #4b4b4b;
+  max-height: 100%;
+}
+
+#parameter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 320px;
+  height: 500px;
+  right: 0;
+  position: absolute;
+  -webkit-transition: 200ms;
+  transition: 200ms;
+  -webkit-transition-timing-function: linear;
+          transition-timing-function: linear;
+  background-color: #aaaaaa4f;
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  border-radius: 8px 0 0 8px;
+  overflow: hidden;
+}
+
+#parameter[show=false] {
+  right: -307px;
+  height: 45px;
+}
+
+#parameter #parameter-button {
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  width: 13px;
+  height: 100%;
+  background-color: #555;
+  -webkit-transition: 100ms;
+  transition: 100ms;
+}
+
+#parameter #parameter-button:hover {
+  background-color: #aaaaaa4f;
+}
+
+#parameter .container {
+  width: 100%;
+  height: 100%;
+  left: 0;
+  padding: 10px;
+  padding-left: 23px;
+}
+
+#parameter .container .main-box {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: hidden;
+  background-color: #303030bb;
+  border-radius: 8px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#parameter .container .main-box .list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 80%;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#parameter .container .main-box .list .pre {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+
+#parameter .container .main-box .list .title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#parameter .container .main-box .list input {
+  background: none;
+  outline: none;
+  border: none;
+  width: 80%;
+  font-size: 16px;
+  color: #7e98ff;
+  border-bottom: 1px solid #5264ae;
+}
+
+#parameter .container .main-box .list input[type=range] {
+  cursor: pointer;
+}
+
+#parameter .container .main-box .list button {
+  outline: none;
+  cursor: pointer;
+  width: 80%;
+  padding: 5px 0;
+  height: 30px;
+  border-radius: 5px;
+  -webkit-transition: 300ms;
+  transition: 300ms;
+  color: #c9d1d9;
+  border: 2px solid #363b42;
+  background-color: #21262D;
+}
+
+#parameter .container .main-box .list button:hover {
+  border-color: #8b949e;
+  background-color: #30363d;
+}
+
+#parameter .container .main-box .list button:active {
+  background-color: #282e33;
+}
+/*# sourceMappingURL=main.css.map */

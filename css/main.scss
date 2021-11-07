@@ -1,0 +1,140 @@
+@mixin size($w, $h:$w) {
+    width: $w;
+    height: $h;
+}
+
+@mixin flex-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+$br: 8px;
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    @include size(100vw, 100vh);
+    color: #ccc;
+    margin: 0;
+    overflow: hidden;
+    background-color: #262626;
+}
+
+body,
+main {
+    @include flex-box();
+    max-height: 100%;
+}
+
+canvas {
+    box-sizing: border-box;
+    border: 2px solid #4b4b4b;
+    max-height: 100%;
+}
+
+#parameter {
+    $width: 320px;
+    $button-width: 13px;
+    @include flex-box();
+    @include size($width, 500px);
+    right: 0;
+    position: absolute;
+    transition: 200ms;
+    transition-timing-function: linear;
+    background-color: #aaaaaa4f;
+    backdrop-filter: blur(4px);
+    border-radius: $br 0 0 $br;
+    overflow: hidden;
+
+    &[show=false] {
+        right: -$width + $button-width;
+        height: 45px;
+    }
+
+    #parameter-button {
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        width: $button-width;
+        height: 100%;
+        background-color: #555;
+        transition: 100ms;
+
+        &:hover {
+            background-color: #aaaaaa4f;
+        }
+    }
+
+    .container {
+        @include size(100%);
+        left: 0;
+        padding: 10px;
+        padding-left: 10px + $button-width;
+
+        .main-box {
+            @include size(100%);
+            @include flex-box();
+            overflow: hidden;
+            background-color: #303030bb;
+            border-radius: $br;
+            flex-wrap: wrap;
+
+            .list {
+                @include flex-box();
+                width: 80%;
+                flex-wrap: wrap;
+
+                .pre {
+                    @include flex-box();
+                    justify-content: space-between;
+                    width: 100%;
+                }
+
+                .title {
+                    font-weight: bold;
+                    font-size: 18px;
+                }
+
+                input {
+                    background: none;
+                    outline: none;
+                    border: none;
+                    width: 80%;
+                    font-size: 16px;
+                    color: #7e98ff;
+                    border-bottom: 1px solid #5264ae;
+
+                    &[type=range] {
+                        cursor: pointer;
+                    }
+                }
+
+                button {
+                    outline: none;
+                    cursor: pointer;
+                    width: 80%;
+                    padding: 5px 0;
+                    height: 30px;
+                    border-radius: 5px;
+                    transition: 300ms;
+                    color: #c9d1d9;
+                    border: 2px solid #363b42;
+                    background-color: #21262D;
+
+                    &:hover {
+                        border-color: #8b949e;
+                        background-color: #30363d;
+                    }
+
+                    &:active {
+                        background-color: #282e33;
+                    }
+                }
+            }
+        }
+    }
+}
