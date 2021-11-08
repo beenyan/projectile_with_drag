@@ -45,7 +45,7 @@ class Ball {
         let yMax = pow(this.v.y, 2) / (2 * G) + this.y;
         let xMax = (this.v.x * this.v.y / -G) + (sqrt(2 * yMax / G) * this.v.x);
         let t = (-this.v.y / G) + (sqrt(2 * yMax / G));
-        scale = max(0.1, min(size.w / (1.2 * xMax), size.h / (1.2 * yMax)));
+        scale = min(abs(size.w / (1.2 * xMax)), abs(size.h / (1.2 * yMax)));
         this.speed = t / this.second; // 速度校正
 
         this.pos.x = this.x;
