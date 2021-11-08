@@ -16,6 +16,7 @@ $('#velocity').on('input', event => { // 設定初速度
     let self = event.target;
     if (!self.value.match(/^[+]?\d+(\.\d+)?$/)) return;
     balls.forEach(ball => ball.v.val = parseFloat(self.value));
+    init();
 });
 
 $('#degree').on('input', event => { // 設定角度

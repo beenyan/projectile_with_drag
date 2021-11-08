@@ -15,9 +15,13 @@ function draw() {
     balls.forEach(ball => ball.draw());
 }
 
-setInterval(update, 1);
+window.onload = () => {
+    setInterval(update, 1);
+};
 
 let size;
+const G = 9.8;
+let base = 50;
 let scale = 2;
 let boundary;
 let dragBall = new Ball({ drag: true, pathColor: '#AB5E9D' });

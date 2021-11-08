@@ -1,4 +1,4 @@
-let setBoundary = (percent = 5) => {
+let setBoundary = (percent = 6) => {
     size = { w: windowWidth * 0.9, h: windowHeight * 0.95 };
     let temp = min(size.w, size.h);
     boundary = temp * percent / 100;
@@ -11,12 +11,23 @@ let init = () => {
 let axis = () => {
     push();
     translate(boundary, size.h - boundary);
+
+    let boardCount = size.w / (base * scale);
+    while (boardCount > 12) {
+        base *= 2;
+        boardCount /= 2;
+    }
+
+    while (boardCount < 7) {
+        base /= 2;
+        boardCount *= 2;
+    }
     // 10 公尺軸
     stroke('rgb(80,0,0)');
     strokeWeight(1);
-    for (let bx = 0; bx < size.w; bx += 10 * scale)
+    for (let bx = 0; bx < size.w; bx += base / 5 * scale)
         line(bx, 0, bx, -size.h);
-    for (let by = 0; by < size.h; by += 10 * scale)
+    for (let by = 0; by < size.h; by += base / 5 * scale)
         line(0, -by, size.w, -by);
 
     // 50 公尺軸
@@ -24,18 +35,18 @@ let axis = () => {
     strokeWeight(3);
     fill('#F27477');
     textAlign(CENTER);
-    for (let bx = 50 * scale; bx < size.w; bx += 50 * scale) {
+    for (let bx = base * scale; bx < size.w; bx += base * scale) {
         stroke('rgb(160,0,0)');
         line(bx, 0, bx, -size.h);
         noStroke();
-        text(bx / scale, bx, 16);
+        text(round(bx / scale, 3), bx, 16);
     }
     textAlign(RIGHT, CENTER);
-    for (let by = 50 * scale; by < size.h; by += 50 * scale) {
+    for (let by = base * scale; by < size.h; by += base * scale) {
         stroke('rgb(160,0,0)');
         line(0, -by, size.w, -by);
         noStroke();
-        text(by / scale, -5, -by);
+        text(round(by / scale, 3), -5, -by);
     }
 
     // x y 軸

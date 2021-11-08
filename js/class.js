@@ -8,6 +8,7 @@ class Ball {
             diameter: 20, // 半徑
             degree: 45, // 角度
             drag: false, // 是否受到風阻影響
+            second: 2, // 跑完程式需要的時間
             startTime: +new Date(), // 開始時間
             pathColor: 'yellow',
             run: { drawArrow: true, update: false },
@@ -19,11 +20,11 @@ class Ball {
         Object.assign(this, def);
     }
     get position() {
-        let timeLeft = (+new Date() - this.startTime) / 500 * this.speed;
+        let timeLeft = (+new Date() - this.startTime) / 1000 * this.speed;
         let drag = this.dragV(timeLeft);
         return {
-            x: scale * (this.v.x * timeLeft + (this.drag ? drag.x : 0)),
-            y: scale * (this.y - (this.v.y * timeLeft + this.gravity(timeLeft)) + (this.drag ? drag.y : 0))
+            x: this.v.x * timeLeft + (this.drag ? drag.x : 0),
+            y: this.y - (this.v.y * timeLeft + this.gravity(timeLeft)) + (this.drag ? drag.y : 0)
         }
     }
     dragV(timeLeft) {
@@ -33,15 +34,22 @@ class Ball {
         }
     }
     gravity(time) {
-        return 0.5 * 9.8 * time ** 2;
+        return 0.5 * G * time ** 2;
     }
     init() {
-        this.pos.x = this.x;
-        this.pos.y = -this.y * scale;
         this.v.x = cos(this.degree) * parseFloat(this.v.val);
         this.v.y = -sin(this.degree) * parseFloat(this.v.val);
         this.run.update = false;
         this.run.drawArrow = true;
+        // 座標軸校正
+        let yMax = pow(this.v.y, 2) / (2 * G) + this.y;
+        let xMax = (this.v.x * this.v.y / -G) + (sqrt(2 * yMax / G) * this.v.x);
+        let t = (-this.v.y / G) + (sqrt(2 * yMax / G));
+        scale = min(size.w / (1.2 * xMax), size.h / (1.2 * yMax));
+        this.speed = t / this.second; // 速度校正
+
+        this.pos.x = this.x;
+        this.pos.y = -this.y * scale;
     }
     arrow() {
         let startLen = 25;
@@ -55,7 +63,7 @@ class Ball {
         strokeWeight(2);
         beginShape();
         noFill();
-        this.data.forEach(point => vertex(point.x, -point.y));
+        this.data.forEach(point => vertex(point.x * scale, -point.y * scale));
         endShape();
     }
     draw() {
@@ -73,8 +81,8 @@ class Ball {
         if (this.pos.y > 0) return;
         if (!this.run.update) return;
         let pos = this.position;
-        this.pos.x = pos.x;
-        this.pos.y = -pos.y;
+        this.pos.x = scale * pos.x;
+        this.pos.y = scale * -pos.y;
         this.data.push(this.position);
     }
 }
