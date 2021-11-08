@@ -21,17 +21,21 @@ class Ball {
     }
     get position() {
         let timeLeft = (+new Date() - this.startTime) / 1000 * this.speed;
-        let drag = this.dragV(timeLeft);
+        if (this.drag) {
+            this.dragV();
+            console.log(this.v.x, this.v.x * timeLeft);
+        }
         return {
-            x: this.v.x * timeLeft + (this.drag ? drag.x : 0),
-            y: this.y - (this.v.y * timeLeft + this.gravity(timeLeft)) + (this.drag ? drag.y : 0)
+            x: this.v.x * timeLeft,
+            y: this.y - (this.v.y * timeLeft + this.gravity(timeLeft)),
+            time: timeLeft
         }
     }
-    dragV(timeLeft) {
-        return {
-            x: -(this.v.drag / this.m) * this.v.x * timeLeft,
-            y: (this.v.drag / this.m) * this.v.y * timeLeft
-        }
+    dragV() {
+        if (this.data.length < 2) return;
+        let dTime = 0.5*(this.data[this.data.length - 1].time - this.data[this.data.length - 2].time) ** 2;
+        this.v.x -= (this.v.drag / this.m) * this.v.x * dTime
+        this.v.y -= (this.v.drag / this.m) * this.v.y * dTime
     }
     gravity(time) {
         return 0.5 * G * time ** 2;
