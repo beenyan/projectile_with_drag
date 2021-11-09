@@ -45,7 +45,6 @@ class Ball {
         let bb4ac = sqrt(pow(b, 2) - 4 * a * c);
         let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
         this.speed = t / this.second; // 速度校正
-
         this.pos.x = this.x;
         this.pos.y = this.y;
     }
@@ -85,22 +84,24 @@ class Ball {
         pop();
     }
     move(time) { // 移動到的位置
+        let last = this.data[this.data.length - 1];
+        let dTime = time - last.time;
         let c = this.C_Drag;
-        if (this.isDrag) {
-            console.log(c.x * this.v.x);
-        }
+
+        this.v.x = last.v.x + c.x * dTime;
+        this.v.y = last.v.y + (c.y - G) * dTime;
         return {
-            x: (this.x) + (this.v.x * time) - (0.5 * 0 * pow(time, 2)),
-            y: (this.y) + (this.v.y * time) - (0.5 * G * pow(time, 2))
+            x: (this.v.x * dTime) - (0.5 * 0 * pow(dTime, 2)),
+            y: (this.v.y * dTime) - (0.5 * G * pow(dTime, 2))
         };
     }
     update() {
         if (!this.isUpdate) return;
         if (this.pos.y < 0) return;
-        let time = (+new Date() - this.startTime) / 1000;
-        let newPos = this.move(time * this.speed);
-        this.pos.x = abs(newPos.x);
-        this.pos.y = newPos.y;
+        let time = (+new Date() - this.startTime) / 1000 * this.speed;
+        let newPos = this.move(time);
+        this.pos.x += newPos.x;
+        this.pos.y += newPos.y;
         this.data.push(this.position(time));
     }
 }
