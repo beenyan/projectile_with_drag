@@ -50,7 +50,7 @@ class Ball {
         this.pos.y = this.y;
     }
     start() {
-        set
+        this.setValue();
         this.isUpdate = true;
         this.startTime = +new Date();
         this.data = [this.position(0)];
@@ -88,7 +88,7 @@ class Ball {
         let c = this.C_Drag;
         return {
             x: (this.x) + (this.v.x * time) - (0.5 * 0 * pow(time, 2)),
-            y: (this.y) + (this.v.x * time) - (0.5 * G * pow(time, 2))
+            y: (this.y) + (this.v.y * time) - (0.5 * G * pow(time, 2))
         };
     }
     update() {
