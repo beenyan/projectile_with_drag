@@ -23,35 +23,36 @@
                         <div class="title">高度</div>
                         <div class="value"></div>
                     </div>
-                    <input id="height" type="text" value="100">
+                    <input id="height" type="number" min="0" value="100" pattern="^[+]?\d+(\.\d+)?$">
                 </div>
                 <div class="list">
                     <div class="pre">
                         <div class="title">初速度</div>
                         <div class="value"></div>
                     </div>
-                    <input id="velocity" type="text" value="60">
+                    <input id="velocity" type="number" min="0" value="60" pattern="^[+]?\d+(\.\d+)?$">
                 </div>
                 <div class="list">
                     <div class="pre">
                         <div class="title">角度</div>
                         <div class="value">45</div>
                     </div>
-                    <input id="degree" type="range" min="-90" max="90" step="0.01" value="45">
+                    <input id="degree" type="range" min="-90" max="90" step="0.01" value="45"
+                        pattern="^[-+]?\d+(\.\d+)?$">
                 </div>
                 <div class="list">
                     <div class="pre">
                         <div class="title">空氣阻力</div>
                         <div class="value">0.9</div>
                     </div>
-                    <input id="drag" type="range" min="0" max="1" step="0.01" value="0.9">
+                    <input id="drag" type="range" min="0" max="1" step="0.01" value="0.9" pattern="^[+]?\d+(\.\d+)?$">
                 </div>
                 <div class="list">
                     <div class="pre">
                         <div class="title">質量</div>
                         <div class="value">10</div>
                     </div>
-                    <input id="mass" type="range" min="1" max="30" step="0.01" value="10">
+                    <input id="mass" type="range" min="1" max="30" step="0.01" value="10" pattern="^[+]?\d+(\.\d+)?$">
                 </div>
                 <div class="list">
                     <button id="start">Start</button>

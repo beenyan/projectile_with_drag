@@ -7,7 +7,8 @@ $('#parameter-button').click(() => {
 
 $('#height').on('input', event => { // 設定高度
     let self = event.target;
-    if (!self.value.match(/^[+]?\d+(\.\d+)?$/)) return;
+    let regex = new RegExp(this.attr('pattern'));
+    if (!self.value.match(regex)) return;
     balls.forEach(ball => ball.y = parseFloat(self.value));
     init();
 });
