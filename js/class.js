@@ -33,7 +33,7 @@ class Ball {
     get C_Drag() {
         return {
             x: -(this.isDrag ? (this.v.drag / this.m) * this.v.x : 0),
-            y: -(this.isDrag ? (this.v.drag / this.m) * this.v.y : 0)
+            y: -(this.isDrag ? (this.v.drag / this.m) * this.v.y : 0) - G
         };
     }
     init() {
@@ -89,7 +89,7 @@ class Ball {
         let c = this.C_Drag;
 
         this.v.x = this.v.x + c.x * dTime;
-        this.v.y = this.v.y + (c.y - G) * dTime;
+        this.v.y = this.v.y + c.y * dTime;
         return {
             x: (this.v.x * dTime) - (0.5 * 0 * pow(dTime, 2)),
             y: (this.v.y * dTime) - (0.5 * G * pow(dTime, 2))
