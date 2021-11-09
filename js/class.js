@@ -88,8 +88,8 @@ class Ball {
         let dTime = time - last.time;
         let c = this.C_Drag;
 
-        this.v.x = last.v.x + c.x * dTime;
-        this.v.y = last.v.y + (c.y - G) * dTime;
+        this.v.x = this.v.x + c.x * dTime;
+        this.v.y = this.v.y + (c.y - G) * dTime;
         return {
             x: (this.v.x * dTime) - (0.5 * 0 * pow(dTime, 2)),
             y: (this.v.y * dTime) - (0.5 * G * pow(dTime, 2))
