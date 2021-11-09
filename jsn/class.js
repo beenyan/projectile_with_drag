@@ -50,13 +50,13 @@ class Ball {
         this.pos.y = this.y;
     }
     start() {
-        this.init();
+        set
         this.isUpdate = true;
         this.startTime = +new Date();
         this.data = [this.position(0)];
     }
     position(time) {
-        return { time, ...this.pos };
+        return { time, ...this.pos, v: { ...this.v } };
     }
     arrow() {
         let startLen = 25;
@@ -86,16 +86,9 @@ class Ball {
     }
     move(time) { // 移動到的位置
         let c = this.C_Drag;
-        this.v.x = cos(this.degree) * this.v.val;
-        this.v.x = this.v.x + c.x * time;
-        // this.v.y = this.v.y + c.y * time;
         return {
             x: (this.x) + (this.v.x * time) - (0.5 * 0 * pow(time, 2)),
-            y: (this.y) + (this.v.y * time) - (0.5 * G * pow(time, 2))
-        };
-        return {
-            x: (this.x) + ((this.v.x + c.x) * time) - (0.5 * 0 * pow(time, 2)),
-            y: (this.y) + ((this.v.y + c.y) * time) - (0.5 * G * pow(time, 2))
+            y: (this.y) + (this.v.x * time) - (0.5 * G * pow(time, 2))
         };
     }
     update() {
