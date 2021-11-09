@@ -1,56 +1,22 @@
 $parameter = $('#parameter');
 
 $('#parameter-button').click(() => {
-    // toggle boolen
-    $parameter.attr('show', $parameter.attr('show') === 'false');
+    let show = $parameter.attr('show') === 'false';  // toggle boolen
+    $parameter.attr('show', show); // 打開、關閉 輸入框
 });
 
-$('#height').on('input', event => { // 設定高度
+// 更新輸入的值
+$('#height,#velocity,#degree,#drag,#mass').on('input', event => { // 設定輸入值
     let self = event.target;
-    let regex = new RegExp(this.attr('pattern'));
+    let regex = new RegExp(self.getAttribute('pattern'));
+    // 數值輸入錯誤跳出
     if (!self.value.match(regex)) return;
-    balls.forEach(ball => ball.y = parseFloat(self.value));
-    init();
+    let type = self.getAttribute('type');
+    // 動態更新顯示數字
+    if (type === 'range')
+        $(self).parent().find('.value').text(parseFloat(self.value));
+    setValue();
 });
 
-$('#velocity').on('input', event => { // 設定初速度
-    let self = event.target;
-    if (!self.value.match(/^[+]?\d+(\.\d+)?$/)) return;
-    balls.forEach(ball => ball.v.val = parseFloat(self.value));
-    init();
-});
-
-$('#degree').on('input', event => { // 設定角度
-    let self = event.target;
-    if (!self.value.match(/^[-+]?\d+(\.\d+)?$/)) return;
-    balls.forEach(ball => ball.degree = parseFloat(self.value));
-    $(self).parent().find('.value').text(parseFloat(self.value));
-    init();
-});
-
-$('#drag').on('input', event => { // 設定空氣阻力
-    let self = event.target;
-    if (!self.value.match(/^[+]?\d+(\.\d+)?$/)) return;
-    dragBall.v.drag = parseFloat(self.value);
-    $(self).parent().find('.value').text(parseFloat(self.value));
-    init();
-});
-
-$('#mass').on('input', event => { // 設定重量
-    let self = event.target;
-    if (!self.value.match(/^[+]?\d+(\.\d+)?$/)) return;
-    dragBall.m = parseFloat(self.value);
-    $(self).parent().find('.value').text(parseFloat(self.value));
-    init();
-});
-
-
-$('#start').click(() => {
-    init();
-    balls.forEach(ball => {
-        ball.run.update = true;
-        ball.startTime = +new Date();
-        ball.run.drawArrow = false;
-        ball.data = [ball.position];
-    });
-});
+// 開始演算路徑
+$('#start').click(() => balls.forEach(ball => ball.start()));
