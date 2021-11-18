@@ -13,8 +13,10 @@ class Ball {
             isUpdate: false,
             pos: { x: 0, y: 0 },
             v: { val: 0, x: 0, y: 0, drag: 0 }, // 速度變化量
-            max: { y: 0, x: 0 },
-            data: [] // 路徑資料
+            max: { y: 0, x: 0, degree: 45 },
+            pastTime: 0, // 經過時間
+            data: [], // 資料
+            pathData: [] // 要繪製的路徑
         }
         Object.assign(def, args);
         Object.assign(this, def);
@@ -28,7 +30,37 @@ class Ball {
         this.m = parseFloat($('#mass').val());
         this.v.x = cos(this.degree) * this.v.val;
         this.v.y = sin(this.degree) * this.v.val;
+        this.max.degree = atan(this.v.val / sqrt(pow(this.v.val, 2) + 2 * G * this.y));
         this.init();
+    }
+    init() {
+        // 飛行時間
+        let a = -G;
+        let b = 2 * this.v.y;
+        let c = 2 * this.y;
+        let bb4ac = sqrt(pow(b, 2) - 4 * a * c);
+        let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
+        this.overTime = t; // 結束時間
+        this.dTime = min(this.overTime / 500, 0.001); // 時間間隔
+        this.pos.x = this.x;
+        this.pos.y = this.y;
+    }
+    start() {
+        this.setValue();
+        this.isUpdate = true;
+        this.data = [this.position];
+        this.pathData = [this.position];
+        while (this.pos.y >= 0) {
+            this.pastTime += this.dTime;
+            let newPos = this.move();
+            this.pos.x += newPos.x;
+            this.pos.y += newPos.y;
+            this.data.push(this.position);
+        }
+        this.pos.x = this.x;
+        this.pos.y = this.y;
+        this.pathGrid = floor(this.data.length / 200); // 取點數量
+        this.pathIndex = 0;
     }
     get C_Drag() {
         return {
@@ -36,26 +68,20 @@ class Ball {
             y: -(this.isDrag ? (this.v.drag / this.m) * this.v.y : 0) - G
         };
     }
-    init() {
-        // 飛行時間
-        let g = this.gravity;
-        let a = -G;
-        let b = 2 * this.v.y;
-        let c = 2 * this.y;
-        let bb4ac = sqrt(pow(b, 2) - 4 * a * c);
-        let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
-        this.speed = t / this.second; // 速度校正
-        this.pos.x = this.x;
-        this.pos.y = this.y;
+    get position() {
+        return { time: this.pastTime, vx: this.v.x, vy: this.v.y, ...this.pos };
     }
-    start() {
-        this.setValue();
-        this.isUpdate = true;
-        this.startTime = +new Date();
-        this.data = [this.position(0)];
+    get csv() {
+        let data = this.data.map(item => Object.values(item)).join('\n');
+        return data;
     }
-    position(time) {
-        return { time, ...this.pos, v: { ...this.v } };
+    get csv_parameter() {
+        return `高度,${this.y}
+            初速度,${this.v.val}
+            角度,${this.degree}
+            空氣阻力,${this.v.drag}
+            質量,${this.m}
+            最遠角度,${this.max.degree}\n`.replaceAll(' ', '');
     }
     arrow() {
         let startLen = 25;
@@ -69,10 +95,11 @@ class Ball {
         strokeWeight(2);
         beginShape();
         noFill();
-        this.data.forEach(point => vertex(point.x * scale, -point.y * scale));
+        this.pathData.forEach(point => vertex(point.x * scale, -point.y * scale));
         endShape();
     }
     draw() {
+        this.update();
         push();
         translate(boundary, size.h - boundary);
         if (!this.isUpdate) // 畫角度箭頭
@@ -83,25 +110,27 @@ class Ball {
         circle(this.pos.x * scale, -this.pos.y * scale, this.diameter);
         pop();
     }
-    move(time) { // 移動到的位置
-        let last = this.data[this.data.length - 1];
-        let dTime = time - last.time;
+    move() { // 移動到的位置
         let c = this.C_Drag;
 
-        this.v.x = this.v.x + c.x * dTime;
-        this.v.y = this.v.y + c.y * dTime;
+        this.v.x = this.v.x + c.x * this.dTime;
+        this.v.y = this.v.y + c.y * this.dTime;
         return {
-            x: (this.v.x * dTime) - (0.5 * 0 * pow(dTime, 2)),
-            y: (this.v.y * dTime) - (0.5 * G * pow(dTime, 2))
+            x: (this.v.x * this.dTime) - (0.5 * 0 * pow(this.dTime, 2)),
+            y: (this.v.y * this.dTime) - (0.5 * G * pow(this.dTime, 2))
         };
     }
     update() {
-        if (!this.isUpdate) return;
-        if (this.pos.y < 0) return;
-        let time = (+new Date() - this.startTime) / 1000 * this.speed;
-        let newPos = this.move(time);
-        this.pos.x += newPos.x;
-        this.pos.y += newPos.y;
-        this.data.push(this.position(time));
+        if (!this.isUpdate || this.pos.y < 0) return;
+        this.pathIndex += this.pathGrid;
+        if (this.pathIndex >= this.data.length) { // 最後一個
+            this.pos.y = this.data[this.data.length - 1].y;
+            this.pos.x = this.data[this.data.length - 1].x;
+            this.pathData.push(this.data[this.data.length - 1]);
+            return;
+        }
+        this.pathData.push(this.data[this.pathIndex]);
+        this.pos.y = this.data[this.pathIndex].y;
+        this.pos.x = this.data[this.pathIndex].x;
     }
 }

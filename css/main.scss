@@ -9,6 +9,7 @@
     align-items: center;
 }
 
+$button-width: 13px;
 $br: 8px;
 
 * {
@@ -38,7 +39,6 @@ canvas {
 
 #parameter {
     $width: 320px;
-    $button-width: 13px;
     @include flex-box();
     @include size($width, 500px);
     right: 0;

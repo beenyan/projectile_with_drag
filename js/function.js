@@ -70,3 +70,23 @@ let drawArrow = (base, vec, color) => {
     triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
     pop();
 }
+
+let createCsvFile = () => {
+    let fileName = "拋體運動.csv"; // 匯出的檔名
+    let data = getRandomData();
+    // "\ufeff" 解決亂碼問題
+    let blob = new Blob(["\ufeff" + data], { type: "application/octet-stream" });
+    let href = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+    link.href = href;
+    link.download = fileName;
+    link.click();
+}
+
+// 資料生成
+let getRandomData = () => {
+    let parameter = balls[0].csv_parameter;
+    let header = "時間,速度（x）,速度（y）,位置（x）,位置（y）\n";
+    let data = `無空氣阻力\n${balls[1].csv}\n\n有空氣阻力\n${balls[0].csv}`;
+    return parameter + header + data;
+}

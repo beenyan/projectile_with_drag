@@ -1,8 +1,8 @@
-$parameter = $('#parameter');
-
-$('#parameter-button').click(() => {
-    let show = $parameter.attr('show') === 'false';  // toggle boolen
-    $parameter.attr('show', show); // 打開、關閉 輸入框
+$('#parameter-button,#dataLog-button').click(item => {
+    let $self = $(item.target);
+    let $container = $self.parent();
+    let show = $container.attr('show') === 'false';  // toggle boolen
+    $container.attr('show', show); // 打開、關閉 輸入框
 });
 
 // 更新輸入的值

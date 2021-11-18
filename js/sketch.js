@@ -21,10 +21,6 @@ function mouseWheel(event) {
     else if (event.deltaY < 0) scale *= 1.1; // up
 }
 
-window.onload = () => {
-    setInterval(update, 1);
-};
-
 let size; // 螢幕大小
 const G = 9.8; // 重力
 let base = 50; // 放大基準值
