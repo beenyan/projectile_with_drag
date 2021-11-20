@@ -141,11 +141,45 @@ let getData = () => { // 資料生成
     return parameter + header + data;
 }
 
+let getAirDistance = degree => {
+    return balls[0].distanceWithAir(degree);
+}
+
 let calculateDegree = () => {
     balls.forEach(ball => ball.angleWithDistance = []);
-    for (let degree = 0; degree <= 90; ++degree) {
-        balls.forEach(async ball => {
-            await ball.distance(degree);
-        })
+    for (let degree = 0; degree <= 90; ++degree)
+        balls.forEach(async ball => ball.distance(degree));
+    let maxIndex = 0;
+    let max = 0;
+    balls[0].angleWithDistance.forEach((distance, index) => {
+        if (distance >= max) {
+            max = distance;
+            maxIndex = index;
+        }
+    })
+    $('#has-air-degree').val(maxIndex);
+    for (let i = 0; i < 4; ++i) // 精算四次
+        calculateDegreePrecision();
+}
+
+let calculateDegreePrecision = () => {
+    let degree = $('#has-air-degree').val();
+    if (isNaN(parseFloat(degree))) return;
+    let floatLen = degree.toString().split('.')[1]?.length;
+    degree = parseFloat(degree); // 轉成數字
+    if (floatLen === undefined) floatLen = 0;
+    ++floatLen;
+    let step = 1 / pow(10, floatLen);
+    let defaultDistance = getAirDistance(degree);
+    if (defaultDistance > getAirDistance((degree + step).toFixed(floatLen)))  // 更高值在左邊
+        step *= -1;
+    for (let i = 1; i < 10; ++i) {
+        let nowDistance = getAirDistance((degree + step * i).toFixed(floatLen));
+        if (defaultDistance > nowDistance) {
+            $('#has-air-degree').val((degree + step * --i).toFixed(floatLen));
+            return; // 數值變小
+        }
+        defaultDistance = nowDistance;
     }
+
 }

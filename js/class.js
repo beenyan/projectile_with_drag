@@ -41,6 +41,7 @@ class Ball {
         this.dTime = min(this.overTime / 500, 0.001); // 時間間隔
         this.pos.x = this.x;
         this.pos.y = this.y;
+        if (!this.isDrag) calculateDegree();
     }
     start() {
         this.setValue();
@@ -67,30 +68,33 @@ class Ball {
         let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
         return t;
     }
+    distanceWithAir(degree) {
+        let x = 0;
+        let y = this.y;
+        let vx = cos(degree) * this.v.val;
+        let vy = sin(degree) * this.v.val;
+        while (y >= 0) { // 計算投擲距離
+            let cx = -vx * (this.v.drag / this.m);
+            let cy = -vy * (this.v.drag / this.m) - G;
+            vx = vx + cx * this.dTime;
+            vy = vy + cy * this.dTime;
+            let dx = (vx * this.dTime);
+            let dy = (vy * this.dTime) - (0.5 * G * pow(this.dTime, 2));
+            x += dx;
+            y += dy;
+        }
+        return x;
+    }
     distance(degree) {
         let distance = 0;
         if (this.isDrag) { // 有空氣阻力
-            this.setValue();
-            this.v.x = cos(degree) * this.v.val;
-            this.v.y = sin(degree) * this.v.val;
-            while (this.pos.y >= 0) {
-                this.pastTime += this.dTime;
-                let newPos = this.move();
-                this.pos.x += newPos.x;
-                this.pos.y += newPos.y;
-            }
-            distance = this.pos.x;
+            distance = this.distanceWithAir(degree);
         } else {
             let vx = cos(degree) * this.v.val;
             let vy = sin(degree) * this.v.val;
             distance = this.projectTime(vy) * vx;
         }
-        this.setValue();
         this.angleWithDistance.push(distance);
-        return new Promise((resolve, reject) => {
-            if (degree <= 90) resolve();
-            reject();
-        });
     }
     drawDistance() {
         stroke(this.pathColor);
