@@ -34,7 +34,8 @@ canvas {
   max-height: 100%;
 }
 
-#parameter {
+#parameter,
+#control {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -59,12 +60,16 @@ canvas {
   overflow: hidden;
 }
 
-#parameter[show=false] {
+#parameter[show=false],
+#control[show=false] {
   right: -307px;
   height: 45px;
 }
 
-#parameter #parameter-button {
+#parameter #parameter-button,
+#parameter #control-button,
+#control #parameter-button,
+#control #control-button {
   cursor: pointer;
   position: absolute;
   left: 0;
@@ -75,11 +80,15 @@ canvas {
   transition: 100ms;
 }
 
-#parameter #parameter-button:hover {
+#parameter #parameter-button:hover,
+#parameter #control-button:hover,
+#control #parameter-button:hover,
+#control #control-button:hover {
   background-color: #aaaaaa4f;
 }
 
-#parameter .container {
+#parameter .container,
+#control .container {
   width: 100%;
   height: 100%;
   left: 0;
@@ -87,7 +96,8 @@ canvas {
   padding-left: 23px;
 }
 
-#parameter .container .main-box {
+#parameter .container .main-box,
+#control .container .main-box {
   width: 100%;
   height: 100%;
   display: -webkit-box;
@@ -106,7 +116,8 @@ canvas {
       flex-wrap: wrap;
 }
 
-#parameter .container .main-box .list {
+#parameter .container .main-box .list,
+#control .container .main-box .list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -121,7 +132,8 @@ canvas {
       flex-wrap: wrap;
 }
 
-#parameter .container .main-box .list .pre {
+#parameter .container .main-box .list .pre,
+#control .container .main-box .list .pre {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -137,12 +149,14 @@ canvas {
   width: 100%;
 }
 
-#parameter .container .main-box .list .title {
+#parameter .container .main-box .list .title,
+#control .container .main-box .list .title {
   font-weight: bold;
   font-size: 18px;
 }
 
-#parameter .container .main-box .list input {
+#parameter .container .main-box .list input,
+#control .container .main-box .list input {
   background: none;
   outline: none;
   border: none;
@@ -152,11 +166,13 @@ canvas {
   border-bottom: 1px solid #5264ae;
 }
 
-#parameter .container .main-box .list input[type=range] {
+#parameter .container .main-box .list input[type=range],
+#control .container .main-box .list input[type=range] {
   cursor: pointer;
 }
 
-#parameter .container .main-box .list button {
+#parameter .container .main-box .list button,
+#control .container .main-box .list button {
   outline: none;
   cursor: pointer;
   width: 80%;
@@ -170,12 +186,122 @@ canvas {
   background-color: #21262D;
 }
 
-#parameter .container .main-box .list button:hover {
+#parameter .container .main-box .list button:hover,
+#control .container .main-box .list button:hover {
   border-color: #8b949e;
   background-color: #30363d;
 }
 
-#parameter .container .main-box .list button:active {
+#parameter .container .main-box .list button:active,
+#control .container .main-box .list button:active {
   background-color: #282e33;
+}
+
+#control {
+  left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+#control[show=false] {
+  left: -307px;
+  height: 45px;
+}
+
+#control .container {
+  padding-left: 10px;
+  padding-right: 23px;
+}
+
+#control #control-button {
+  left: unset;
+  right: 0;
+}
+
+#control .main-box {
+  padding: 10px 0;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: auto !important;
+}
+
+.radio-button {
+  width: 100%;
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  position: relative;
+  margin-top: 6px;
+}
+
+.radio-button input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+}
+
+.radio-button input[type=radio]:checked ~ .check-radio {
+  border-color: #0DFF92;
+}
+
+.radio-button input[type=radio]:checked ~ .check-radio::before {
+  background-color: #0DFF92;
+}
+
+.radio-button .check-radio {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  -webkit-transition: 300ms;
+  transition: 300ms;
+  display: inline-block;
+  border: 2px solid #CCC;
+  border-radius: 16px;
+  margin: 5px 0 5px 15px;
+}
+
+.radio-button .check-radio::before {
+  width: 8px;
+  height: 8px;
+  content: '';
+  -webkit-transition: 400ms;
+  transition: 400ms;
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  border-radius: 100%;
+}
+
+.radio-button label {
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding-left: 35px;
+  cursor: pointer;
+  position: relative;
+}
+
+.set-value {
+  cursor: pointer;
+  -webkit-transition: 200ms;
+  transition: 200ms;
+}
+
+.set-value * {
+  pointer-events: none;
+}
+
+.set-value:hover {
+  background-color: #5c5c5cbb !important;
 }
 /*# sourceMappingURL=main.css.map */

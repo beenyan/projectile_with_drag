@@ -9,6 +9,7 @@
     align-items: center;
 }
 
+$main-bgc:#303030bb;
 $button-width: 13px;
 $br: 8px;
 
@@ -37,7 +38,8 @@ canvas {
     max-height: 100%;
 }
 
-#parameter {
+#parameter,
+#control {
     $width: 320px;
     @include flex-box();
     @include size($width, 500px);
@@ -55,7 +57,8 @@ canvas {
         height: 45px;
     }
 
-    #parameter-button {
+    #parameter-button,
+    #control-button {
         cursor: pointer;
         position: absolute;
         left: 0;
@@ -79,7 +82,7 @@ canvas {
             @include size(100%);
             @include flex-box();
             overflow: hidden;
-            background-color: #303030bb;
+            background-color: $main-bgc;
             border-radius: $br;
             flex-wrap: wrap;
 
@@ -136,5 +139,103 @@ canvas {
                 }
             }
         }
+    }
+}
+
+#control {
+    $width: 320px;
+    left: 0;
+    border-radius: 0 $br $br 0;
+
+    &[show=false] {
+        left: -$width + $button-width;
+        height: 45px;
+    }
+
+    .container {
+        padding-left: 10px;
+        padding-right: 10px + $button-width;
+    }
+
+    #control-button {
+        left: unset;
+        right: 0;
+    }
+
+    .main-box {
+        padding: 10px 0;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        @include size(100%, auto !important);
+    }
+}
+
+.radio-button {
+    @include size(100%, auto);
+    @include flex-box();
+    justify-content: flex-start;
+    position: relative;
+    margin-top: 6px;
+
+    input[type=radio] {
+        position: absolute;
+        visibility: hidden;
+
+        &:checked {
+            &~.check-radio {
+                border-color: #0DFF92;
+
+                &::before {
+                    background-color: #0DFF92;
+                }
+            }
+        }
+    }
+
+    .check-radio {
+        $scale: 16px;
+        @include size($scale);
+
+        position: absolute;
+        transition: 300ms;
+        display: inline-block;
+        border: 2px solid #CCC;
+        border-radius: $scale;
+        margin: 5px 0 5px 15px;
+
+        &::before {
+            $size-in: $scale / 2;
+            @include size($size-in);
+
+            content: '';
+            transition: 400ms;
+            display: inline-block;
+            position: absolute;
+            top: ($scale - $size-in) / 4;
+            left: ($scale - $size-in) / 4;
+            border-radius: 100%;
+        }
+    }
+
+    label {
+        @include size(100%);
+
+        display: block;
+        padding-left: 35px;
+        cursor: pointer;
+        position: relative;
+    }
+}
+
+.set-value {
+    cursor: pointer;
+    transition: 200ms;
+
+    * {
+        pointer-events: none;
+    }
+
+    &:hover {
+        background-color: #5c5c5cbb !important;
     }
 }

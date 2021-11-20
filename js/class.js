@@ -16,7 +16,8 @@ class Ball {
             max: { y: 0, x: 0, degree: 45 },
             pastTime: 0, // 經過時間
             data: [], // 資料
-            pathData: [] // 要繪製的路徑
+            pathData: [], // 要繪製的路徑
+            angleWithDistance: [] // 角度與時間關係
         }
         Object.assign(def, args);
         Object.assign(this, def);
@@ -31,16 +32,12 @@ class Ball {
         this.v.x = cos(this.degree) * this.v.val;
         this.v.y = sin(this.degree) * this.v.val;
         this.max.degree = atan(this.v.val / sqrt(pow(this.v.val, 2) + 2 * G * this.y));
+        $('#no-air-degree').val(this.max.degree);
         this.init();
     }
     init() {
         // 飛行時間
-        let a = -G;
-        let b = 2 * this.v.y;
-        let c = 2 * this.y;
-        let bb4ac = sqrt(pow(b, 2) - 4 * a * c);
-        let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
-        this.overTime = t; // 結束時間
+        this.overTime = this.projectTime(); // 結束時間
         this.dTime = min(this.overTime / 500, 0.001); // 時間間隔
         this.pos.x = this.x;
         this.pos.y = this.y;
@@ -62,6 +59,47 @@ class Ball {
         this.pathGrid = floor(this.data.length / 200); // 取點數量
         this.pathIndex = 0;
     }
+    projectTime(vy = this.v.y) {
+        let a = -G;
+        let b = 2 * vy;
+        let c = 2 * this.y;
+        let bb4ac = sqrt(pow(b, 2) - 4 * a * c);
+        let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
+        return t;
+    }
+    distance(degree) {
+        let distance = 0;
+        if (this.isDrag) { // 有空氣阻力
+            this.setValue();
+            this.v.x = cos(degree) * this.v.val;
+            this.v.y = sin(degree) * this.v.val;
+            while (this.pos.y >= 0) {
+                this.pastTime += this.dTime;
+                let newPos = this.move();
+                this.pos.x += newPos.x;
+                this.pos.y += newPos.y;
+            }
+            distance = this.pos.x;
+        } else {
+            let vx = cos(degree) * this.v.val;
+            let vy = sin(degree) * this.v.val;
+            distance = this.projectTime(vy) * vx;
+        }
+        this.setValue();
+        this.angleWithDistance.push(distance);
+        return new Promise((resolve, reject) => {
+            if (degree <= 90) resolve();
+            reject();
+        });
+    }
+    drawDistance() {
+        stroke(this.pathColor);
+        strokeWeight(2);
+        beginShape();
+        noFill();
+        this.angleWithDistance.forEach((point, index) => vertex(xGrid * index / 10, -point * scale));
+        endShape();
+    }
     get C_Drag() {
         return {
             x: -(this.isDrag ? (this.v.drag / this.m) * this.v.x : 0),
@@ -81,7 +119,7 @@ class Ball {
             角度,${this.degree}
             空氣阻力,${this.v.drag}
             質量,${this.m}
-            最遠角度,${this.max.degree}\n`.replaceAll(' ', '');
+            最遠所需角度,${this.max.degree}\n`.replaceAll(' ', '');
     }
     arrow() {
         let startLen = 25;

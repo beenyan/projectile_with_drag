@@ -60,6 +60,47 @@
             </div>
         </div>
     </div>
+    <div id="control" show='true'>
+        <div id="control-button"></div>
+        <div class="container">
+            <div class="main-box set-value">
+                <div class="list">
+                    <div class="pre">
+                        <div class="title">無空氣阻力最遠角度</div>
+                        <div class="value"></div>
+                    </div>
+                    <input type="text" id="no-air-degree" readonly style="cursor: pointer;" value="38.822335336395575">
+                </div>
+            </div>
+            <div class="main-box set-value">
+                <div class="list">
+                    <div class="pre">
+                        <div class="title">有空氣阻力最遠角度</div>
+                        <div class="value"></div>
+                    </div>
+                    <input type="text" id="has-air-degree" readonly style="cursor: pointer;">
+                </div>
+            </div>
+            <div class="main-box">
+                <div class="list">
+                    <div class="pre">
+                        <div class="title">畫布繪製</div>
+                        <div class="value"></div>
+                    </div>
+                    <div class="radio-button">
+                        <input type="radio" id="d-path" name="draw" checked value="projectile">
+                        <div class="check-radio"></div>
+                        <label for="d-path">拋體運動</label>
+                    </div>
+                    <div class="radio-button">
+                        <input type="radio" id="d-degree" name="draw" value="degreeWithDistence">
+                        <div class="check-radio"></div>
+                        <label for="d-degree">角度與距離</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="js/function.js"></script>
     <script src="js/listen.js"></script>
     <script src="js/class.js"></script>
