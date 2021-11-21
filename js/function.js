@@ -158,28 +158,20 @@ let calculateDegree = () => {
         }
     })
     $('#has-air-degree').val(maxIndex);
-    for (let i = 0; i < 4; ++i) // 精算四次
-        calculateDegreePrecision();
+    calculateDegreePrecision(new DOD(0), new DOD(90), 0);
 }
 
-let calculateDegreePrecision = () => {
-    let degree = $('#has-air-degree').val();
-    if (isNaN(parseFloat(degree))) return;
-    let floatLen = degree.toString().split('.')[1]?.length;
-    degree = parseFloat(degree); // 轉成數字
-    if (floatLen === undefined) floatLen = 0;
-    ++floatLen;
-    let step = 1 / pow(10, floatLen);
-    let defaultDistance = getAirDistance(degree);
-    if (defaultDistance > getAirDistance((degree + step).toFixed(floatLen)))  // 更高值在左邊
-        step *= -1;
-    for (let i = 1; i < 10; ++i) {
-        let nowDistance = getAirDistance((degree + step * i).toFixed(floatLen));
-        if (defaultDistance > nowDistance) {
-            $('#has-air-degree').val((degree + step * --i).toFixed(floatLen));
-            return; // 數值變小
-        }
-        defaultDistance = nowDistance;
+let calculateDegreePrecision = (begin, end, count) => {
+    if ($('#drag').val() === '0') {// 無空氣阻力
+        $('#has-air-degree').val($('#no-air-degree').val());
+        return;
     }
-
+    let mid = new DOD(((begin.degree + end.degree) / 2));
+    if (count > 20) {
+        $('#has-air-degree').val(mid.degree);
+        return;
+    }
+    let nextMid = new DOD(mid.degree + 0.000001);
+    if (nextMid.distance > mid.distance) calculateDegreePrecision(mid, end, ++count);
+    else calculateDegreePrecision(begin, mid, ++count);
 }

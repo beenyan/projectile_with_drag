@@ -68,18 +68,25 @@ class Ball {
         let t = max((-b + bb4ac) / (2 * a), (-b - bb4ac) / (2 * a));
         return t;
     }
-    distanceWithAir(degree) {
+    distanceWithAir(degree, dTime = this.dTime) {
         let x = 0;
         let y = this.y;
-        let vx = cos(degree) * this.v.val;
-        let vy = sin(degree) * this.v.val;
-        while (y >= 0) { // 計算投擲距離
+        let vx = parseFloat((cos(degree) * this.v.val).toFixed(14));
+        let vy = parseFloat((sin(degree) * this.v.val).toFixed(14));
+        while (1) { // 計算投擲距離
             let cx = -vx * (this.v.drag / this.m);
             let cy = -vy * (this.v.drag / this.m) - G;
-            vx = vx + cx * this.dTime;
-            vy = vy + cy * this.dTime;
-            let dx = (vx * this.dTime);
-            let dy = (vy * this.dTime) - (0.5 * G * pow(this.dTime, 2));
+            vx = vx + cx * dTime;
+            vy = vy + cy * dTime;
+            let dx = (vx * dTime);
+            let dy = (vy * dTime) - (0.5 * G * pow(dTime, 2));
+
+            if (y + dy < 0) {
+                let ny = y + dy;
+                let yPercent = ny / vy;
+                x -= vx * yPercent;
+                break;
+            }
             x += dx;
             y += dy;
         }
@@ -174,5 +181,12 @@ class Ball {
         this.pathData.push(this.data[this.pathIndex]);
         this.pos.y = this.data[this.pathIndex].y;
         this.pos.x = this.data[this.pathIndex].x;
+    }
+}
+
+class DOD { // degree of distance
+    constructor(degree) {
+        this.degree = degree;
+        this.distance = getAirDistance(degree, 0.000001);
     }
 }
